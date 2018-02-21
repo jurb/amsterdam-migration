@@ -144,25 +144,26 @@ function ready(error, worldCountries, bornAndDied) {
     .append("g")
     .attr("class", "arcs")
     .append("path")
-    .attr(
-      "class",
-      d =>
-        d.properties.Categorie == "Naar Amsterdam gekomen"
-          ? "arc-to"
-          : "arc-from"
-    )
+    .attr("class", d => (d.properties.Categorie == "Naar Amsterdam gekomen" ? "arc-to" : "arc-from"))
     .attr("d", d => path(d))
     .transition()
     .duration(1000)
     .attrTween("stroke-dasharray", function() {
       const len = this.getTotalLength();
       return t => d3.interpolate(`0,${len}`, `${len},0`)(t);
-    });
+    })
+    .attr("opacity", 1)
+    .transition()
+    .duration(2000)
+    .attr("opacity", 0);
 
   d3
     .select("#counter")
     .append("p")
     .text(+d3.min(yearsList));
+
+
+
 
   let intervalIndex = 0;
 
