@@ -52,6 +52,7 @@ d3
 function ready(error, worldCountries, bornAndDied) {
   if (error) return console.log(`error: ${error.responseText}`);
 
+
   // Filter out bad years
   bornAndDied.features = bornAndDied.features.filter(
     e =>
@@ -59,16 +60,18 @@ function ready(error, worldCountries, bornAndDied) {
       e.properties.Sterftejaar != "" &&
       e.properties.Sterftejaar.length < 5
   );
+  
+  console.log(bornAndDied.features)
 
-  let diedInAmsterdam = { features: [], type: "FeatureCollection" };
-  diedInAmsterdam.features = bornAndDied.features.filter(
-    d => d.properties.Categorie == "Naar Amsterdam gekomen"
-  );
+  // Create smaller file
+  const better = bornAndDied.features.map(d => ({
+    coords: d.geometry.coordinates,
+    jaar: +d.properties.Sterftejaar,
+    naam: d.properties.itemLabel,
+  }));
+    
 
-  let bornInAmsterdam = { features: [], type: "FeatureCollection" };
-  bornInAmsterdam.features = bornAndDied.features.filter(
-    d => d.properties.Categorie == "Weg van Amsterdam"
-  );
+  console.log(better)
 
   // Building an array with target names
   const yearsList = d3
@@ -90,7 +93,6 @@ function ready(error, worldCountries, bornAndDied) {
   // general svg object
   const svg3 = d3
     .select("body")
-    .select("#graph")
     .append("svg")
     .attr("width", width)
     .attr("height", height);
@@ -177,20 +179,18 @@ function ready(error, worldCountries, bornAndDied) {
       .enter()
       .selectAll(".arcs")
       .insert("path")
-      .attr(
-        "class",
-        d =>
-          d.properties.Categorie == "Naar Amsterdam gekomen"
-            ? "arc-to"
-            : "arc-from"
-      )
+      .attr("class", d => (d.properties.Categorie == "Naar Amsterdam gekomen" ? "arc-to" : "arc-from"))
       .attr("d", d => path(d))
       .transition()
       .duration(1000)
       .attrTween("stroke-dasharray", function() {
         const len = this.getTotalLength();
         return t => d3.interpolate(`0,${len}`, `${len},0`)(t);
-      });
+      })
+      .attr("opacity", 1)
+      .transition()
+      .duration(2000)
+      .attr("opacity", 0);
 
     d3
       .select("#counter")
