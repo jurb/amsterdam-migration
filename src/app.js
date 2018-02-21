@@ -1,3 +1,5 @@
+// Module imports
+
 const d3 = Object.assign(
   {},
   require("d3-selection"),
@@ -18,6 +20,23 @@ const d3 = Object.assign(
 
 const topojson = require("topojson");
 
+const projectionScale = new URL(window.location.href).searchParams.get('scale')
+  ? new URL(window.location.href).searchParams.get("scale")
+  : 180;
+
+const translateProjectionHeightDivision = new URL(window.location.href).searchParams.get('htdiv')
+  ? new URL(window.location.href).searchParams.get("htdiv")
+  : 1.3;
+
+
+const translateProjectionWidthDivision = new URL(window.location.href).searchParams.get('wtdiv')
+  ? new URL(window.location.href).searchParams.get("wtdiv")
+  : 1.8;
+  
+
+console.log(projectionScale, translateProjectionHeightDivision, translateProjectionWidthDivision)
+
+
 /////////////////////////
 // Data handling
 /////////////////////////
@@ -25,7 +44,7 @@ const topojson = require("topojson");
 d3
   .queue()
   // .defer(d3.csv, "data/data.csv")
-  .defer(d3.json, "data/world-110m.json")
+  .defer(d3.json, "data/world-50m.json")
   .defer(d3.json, "data/bornanddiedinamsterdam.geojson")
   .await(ready);
 
@@ -71,6 +90,7 @@ function ready(error, worldCountries, bornAndDied) {
   // general svg object
   const svg3 = d3
     .select("body")
+    .select("#graph")
     .append("svg")
     .attr("width", width)
     .attr("height", height);
@@ -78,10 +98,10 @@ function ready(error, worldCountries, bornAndDied) {
   // map projection
   const projection = d3
     .geoMercator()
-    .scale(180)
+    .scale(projectionScale)
     // .scale(1100)
     // .rotate([0, -10])
-    .translate([width / 2, height / 1.2])
+    .translate([width / translateProjectionWidthDivision, height / translateProjectionHeightDivision])
     // .translate([width / 2, height + 800])
     .precision(0.1);
 
