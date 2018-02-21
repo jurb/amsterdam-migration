@@ -93,6 +93,7 @@ function ready(error, worldCountries, bornAndDied) {
   // general svg object
   const svg3 = d3
     .select("body")
+    .select("#graph")
     .append("svg")
     .attr("width", width)
     .attr("height", height);
