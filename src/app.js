@@ -18,7 +18,10 @@ const d3 = Object.assign(
   require("d3-interpolate")
 );
 
-const topojson = require("topojson");
+import * as topojson from "topojson-client";
+import "url-search-params-polyfill";
+
+
 
 const projectionScale = new URL(window.location.href).searchParams.get('scale')
   ? new URL(window.location.href).searchParams.get("scale")
