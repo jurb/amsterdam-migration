@@ -22,6 +22,13 @@ import * as topojson from "topojson-client";
 import "url-search-params-polyfill";
 
 
+if (window.URL) {
+  Object.defineProperty(URL.prototype, "searchParams", {
+    get: function() {
+      return new URLSearchParams(this.search);
+    }
+  });
+}
 
 const projectionScale = new URL(window.location.href).searchParams.get('scale')
   ? new URL(window.location.href).searchParams.get("scale")
