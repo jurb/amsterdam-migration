@@ -44,9 +44,6 @@ const translateProjectionWidthDivision = new URL(window.location.href).searchPar
   : 1.8;
   
 
-console.log(projectionScale, translateProjectionHeightDivision, translateProjectionWidthDivision)
-
-
 /////////////////////////
 // Data handling
 /////////////////////////
@@ -71,18 +68,6 @@ function ready(error, worldCountries, bornAndDied) {
       e.properties.Sterftejaar.length < 5
   );
   
-  console.log(bornAndDied.features)
-
-  // Create smaller file
-  const better = bornAndDied.features.map(d => ({
-    coords: d.geometry.coordinates,
-    jaar: +d.properties.Sterftejaar,
-    naam: d.properties.itemLabel,
-  }));
-    
-
-  console.log(better)
-
   // Building an array with target names
   const yearsList = d3
     .map(bornAndDied.features, d => +d.properties.Sterftejaar)
