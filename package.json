@@ -33,6 +33,9 @@
     "materialize": "^1.0.0",
     "materialize-css": "^0.100.2",
     "topojson": "^3.0.2",
+    "topojson-client": "^3.0.0",
+    "topojson-server": "^3.0.0",
+    "topojson-simplify": "^3.0.2",
     "url-search-params-polyfill": "^2.0.3"
   }
 }
